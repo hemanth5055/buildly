@@ -61,8 +61,8 @@ INSTRUCTIONS:
 
   const result = await model.generateContent(enhancedPrompt);
   const text = result.response.text();
-
   // Directly eval, since we’re enforcing no code block wrapping
+  console.log(text)
   const files: FileStructure = eval(`(${text.trim()})`);
   return files;
 }
