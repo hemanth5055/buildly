@@ -1,5 +1,7 @@
 import { getProjectsOfUser } from "@/actions/project.action";
 import { MoveUpRight, Trash } from "lucide-react";
+import Link from "next/link";
+import { redirect } from "next/navigation";
 import React from "react";
 
 const Projects = async ({ id }: { id: string }) => {
@@ -25,9 +27,12 @@ const Projects = async ({ id }: { id: string }) => {
             </p>
           </div>
           <div className="flex gap-2 items-start">
-            <div className="w-[40px] h-[40px] flex rounded-full items-center justify-center cursor-pointer">
-              <MoveUpRight />
-            </div>
+            <Link href={`/project/${project.id}`}>
+              <div className="w-[40px] h-[40px] flex rounded-full items-center justify-center cursor-pointer">
+                <MoveUpRight />
+              </div>
+            </Link>
+
             <div className="w-[40px] h-[40px] flex rounded-full items-center justify-center cursor-pointer">
               <Trash />
             </div>

@@ -1,6 +1,7 @@
 import { getUserByClerkId, syncUser } from "@/actions/user";
 import Loading from "@/Components/Loading";
 import Projects from "@/Components/Projects";
+import Prompt from "@/Components/Prompt";
 import { SignOutButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { LogOut } from "lucide-react";
@@ -12,7 +13,7 @@ const Page = async () => {
   if (!userId) redirect("/signin");
   // const syncUserwithDb = await syncUser(); // <-- Await added
   const { success, user } = await getUserByClerkId(userId);
-  if (!success) redirect("/signin");
+  if (!success || !user) redirect("/signin");
   return (
     <div className="w-full flex flex-col gap-4 p-3">
       {/* navbar */}
@@ -34,17 +35,7 @@ const Page = async () => {
       </div>
 
       {/* prompt-area */}
-      <div className="w-full flex flex-col gap-4 items-center mt-[100px] mb-[30px]">
-        <textarea
-          name="prompt"
-          id="prompt"
-          className="w-[60%] h-[200px] rounded-[10px] bg-[#121212] outline-none p-4 text-[20px] resize-none"
-          placeholder="What are you planning to create?"
-        ></textarea>
-        <div className="bg-[#121212] px-4 py-2 rounded-[5px] text-white cursor-pointer">
-          Generate 🚀
-        </div>
-      </div>
+      <Prompt></Prompt>
 
       <div className="w-full flex flex-col gap-4 p-4">
         <h1 className="font-medium text-[20px] tracking-[-1px]">
@@ -52,7 +43,7 @@ const Page = async () => {
         </h1>
         {/* user-previous-prompted-projects */}
         <React.Suspense fallback={<Loading></Loading>}>
-          <Projects id={userId}></Projects>
+          <Projects id={user.id}></Projects>
         </React.Suspense>
       </div>
     </div>

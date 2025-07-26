@@ -24,7 +24,6 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-
     const files = await generateCode(prompt.trim());
     return NextResponse.json({ success: true, data: files });
   } catch (error) {
@@ -48,6 +47,7 @@ Generate a complete, lightweight web application using ONLY HTML, CSS, and vanil
 
 INSTRUCTIONS:
 - Respond ONLY with a valid JavaScript object.
+- The Backgorund color should always be white
 - DO NOT use markdown or wrap the object in \`\`\`js, \`\`\`javascript, or \`\`\` at all.
 - Use backticks inside the object for template literals as needed.
 - Object format must be exactly like this:
@@ -62,7 +62,7 @@ INSTRUCTIONS:
   const result = await model.generateContent(enhancedPrompt);
   const text = result.response.text();
   // Directly eval, since we’re enforcing no code block wrapping
-  console.log(text)
+  console.log(text);
   const files: FileStructure = eval(`(${text.trim()})`);
   return files;
 }
