@@ -18,7 +18,12 @@ const Split = ({ files }: { files: any }) => {
 
       {/* Content Area */}
       <div className="w-full h-full overflow-auto">
-        {showCode ? <Code files={files} /> : <Preview files={files} />}
+        <div className={`w-full h-full ${!showCode ? "hidden" : ""}`}>
+          <Code files={files} />
+        </div>
+        <div className={`w-full h-full ${showCode ? "hidden" : ""}`}>
+          <Preview files={files} />
+        </div>
       </div>
     </div>
   );
