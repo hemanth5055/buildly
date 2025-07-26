@@ -1,0 +1,33 @@
+//models/schema.prisma
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  clerkId   String   @unique()
+  image     String
+  credits   Int      @default(10)
+  createdAt DateTime @default(now())
+
+  projects Project[]
+}
+
+model Project {
+  id            String   @id @default(uuid())
+  name          String
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  code          String
+  initialPrompt String
+  createdAt     DateTime @default(now())
+
+  @@index([userId])
+}
