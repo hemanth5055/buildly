@@ -1,5 +1,7 @@
 "use client";
 import { File } from "lucide-react";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import React, { useState, useEffect } from "react";
 
 interface FileStructure {
@@ -22,33 +24,43 @@ const Code = ({ files }: { files: FileStructure }) => {
   }, [selectedFile, files]);
 
   return (
-    <div className="w-full h-full flex rounded-xl shadow-lg overflow-hidden">
+    <div className="w-full h-full flex bg-black text-white overflow-hidden">
       {/* Sidebar */}
-      <div className="w-[25%] h-full p-4 bg-[#1a1a1a]">
-        <h2 className="text-sm font-semibold text-white mb-4">Files</h2>
-        <div className="space-y-2">
-          {fileEntries.map(([fileName, fileObj]) => (
+      <div className="w-1/4 h-full bg-[#0f0f0f] p-3">
+        <div className="space-y-1">
+          {fileEntries.map(([fileName]) => (
             <div
               key={fileName}
-              className={`cursor-pointer flex items-center gap-2 px-3 py-2 rounded-lg transition ${
+              className={`text-sm cursor-pointer px-3 py-2 rounded-md flex items-center gap-2 transition-all ${
                 selectedFile === fileName
-                  ? "bg-[#212121]"
-                  : "hover:bg-[#212121]"
+                  ? "bg-[#1c1c1c] text-white"
+                  : "text-gray-400 hover:bg-[#1a1a1a]"
               }`}
               onClick={() => setSelectedFile(fileName)}
             >
-              <File className="text-white" size={18} />
-              <span className="text-sm font-medium text-white">{fileName}</span>
+              <File size={16} className="text-gray-400" />
+              <span>{fileName}</span>
             </div>
           ))}
         </div>
       </div>
 
-      {/* File Viewer Area */}
-      <div className="w-[75%] h-full p-6 bg-[#121212] text-white overflow-auto">
-        <pre className="whitespace-pre-wrap leading-relaxed text-sm">
-          <code>{code}</code>
-        </pre>
+      {/* Viewer */}
+      <div className="w-3/4 h-full overflow-auto bg-[#101010] p-4">
+        <SyntaxHighlighter
+          language="typescript"
+          style={vscDarkPlus}
+          showLineNumbers
+          wrapLines
+          customStyle={{
+            background: "transparent",
+            padding: 0,
+            fontSize: "13px",
+            lineHeight: "2",
+          }}
+        >
+          {code}
+        </SyntaxHighlighter>
       </div>
     </div>
   );

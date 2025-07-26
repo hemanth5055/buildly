@@ -6,10 +6,10 @@ const Preview = ({ files }: { files: any }) => {
   const { mountFiles, webContainerRef } = useWebContainer();
   const [loading, setLoading] = useState(true);
   const [serverUrl, setServerUrl] = useState<string | null>(null);
+  const [delayed, setDelayed] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
-
     const run = async () => {
       try {
         setLoading(true);
@@ -20,6 +20,7 @@ const Preview = ({ files }: { files: any }) => {
             if (isMounted) {
               setServerUrl(url);
               setLoading(false);
+              setDelayed(false);
             }
           });
         }
@@ -31,16 +32,25 @@ const Preview = ({ files }: { files: any }) => {
 
     run();
 
+    const timeout = setTimeout(() => {
+      if (isMounted && loading) {
+        setDelayed(true);
+      }
+    }, 15000);
+
     return () => {
       isMounted = false;
+      clearTimeout(timeout);
     };
   }, [files]);
 
   if (loading || !serverUrl) {
     return (
-      <div className="w-full h-full flex items-center justify-center ">
-        <div className="text-gray-300 animate-pulse text-lg">
-          Starting server...
+      <div className="w-full h-full flex items-center justify-center">
+        <div className="text-gray-300 animate-pulse text-lg text-center px-4">
+          {delayed
+            ? "It's taking longer than expected. Please refresh."
+            : "Starting server..."}
         </div>
       </div>
     );
@@ -49,7 +59,7 @@ const Preview = ({ files }: { files: any }) => {
   return (
     <iframe
       src={serverUrl}
-      className="w-full h-full"
+      className="w-full h-full rounded-[10px]"
       sandbox="allow-scripts allow-same-origin allow-forms"
       title="Preview"
     />

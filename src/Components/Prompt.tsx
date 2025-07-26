@@ -5,7 +5,7 @@ import { addProject } from "@/actions/project.action";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
-const Prompt = () => {
+const Prompt = ({ credits }: { credits: Number }) => {
   const [prmt, setPrmt] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -19,7 +19,8 @@ const Prompt = () => {
       if (data.success) {
         //add this data to database and redirect to /projectId
         const addingFilestoDb = await addProject(
-          JSON.stringify(data.data),
+          data.data.name,
+          JSON.stringify(data.data.code),
           prmt
         );
         if (addingFilestoDb.success) {
@@ -82,9 +83,14 @@ const Prompt = () => {
       ></textarea>
 
       <button
-        className="bg-[#121212] px-4 py-2 rounded-[5px] text-white cursor-pointer"
+        className={`px-4 py-2 rounded-[5px] text-white transition 
+    ${
+      credits === 0 || loading
+        ? "bg-gray-500 cursor-not-allowed"
+        : "bg-[#121212] cursor-pointer"
+    }`}
         onClick={handleCreate}
-        disabled={loading}
+        disabled={loading || credits === 0}
       >
         Generate 🚀
       </button>

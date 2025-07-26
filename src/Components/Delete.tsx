@@ -15,6 +15,7 @@ const Delete = ({ id }: { id: string }) => {
     try {
       const res = await axios.delete(`/api/delete-project/${id}`);
       if (res.data.success) {
+        toast.success("File deleted successfully");
         router.refresh();
       } else {
         toast.error("Failed to delete project");

@@ -8,17 +8,59 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import React from "react";
 
+// Parses the <File name="...">...</File> blocks into an object keyed by filename -> Took Help of AI
+function parseFiles(input: string) {
+  // Handle escaped characters properly
+  let processedInput = input.replace(/\\n/g, "\n");
+  processedInput = processedInput.replace(/\\"/g, '"'); // Handle escaped quotes
+
+  // Try different regex patterns to see which one works
+  const patterns = [
+    /<File name="([^"]+)">\n([\s\S]*?)<\/File>/g,
+    /<File name="([^"]+)">([\s\S]*?)<\/File>/g, // Without requiring \n after opening tag
+    /<File\s+name="([^"]+)"\s*>([\s\S]*?)<\/File>/g, // More flexible whitespace
+  ];
+
+  const files: Record<string, { file: { contents: string } }> = {};
+  let matchCount = 0;
+
+  for (let i = 0; i < patterns.length; i++) {
+    const pattern = patterns[i];
+    // Reset the regex
+    pattern.lastIndex = 0;
+    const matches = Array.from(processedInput.matchAll(pattern));
+    if (matches.length > 0) {
+      for (const [fullMatch, name, content] of matches) {
+        matchCount++;
+        files[name] = {
+          file: { contents: content.trim() },
+        };
+      }
+      break; // Stop trying other patterns if this one worked
+    }
+  }
+
+  return files;
+}
+
 const page = async ({ params }: { params: Promise<{ projectId: string }> }) => {
   const { projectId } = await params;
   const { userId } = await auth();
   if (!userId) redirect("/signin");
-  //retrieve the project and log it here
   if (!projectId) notFound();
+
   const { success, project } = await getSpecificProject(projectId);
   if (!success || !project) notFound();
-  let parsedFiles: Record<string, any>;
+
+  let parsedFiles: Record<string, { file: { contents: string } }>;
   try {
-    parsedFiles = JSON.parse(project.code);
+    parsedFiles = parseFiles(project.code);
+
+    // Additional debugging
+    if (Object.keys(parsedFiles).length === 0) {
+      console.error("❌ No files were parsed!");
+      console.log("Raw project.code:", JSON.stringify(project.code));
+    }
   } catch (err) {
     console.error("Failed to parse project code:", err);
     return notFound();
@@ -27,8 +69,7 @@ const page = async ({ params }: { params: Promise<{ projectId: string }> }) => {
   const files = {
     "package.json": {
       file: {
-        contents: `
-{
+        contents: `{
   "name": "${project.name.toLowerCase().replace(/\s+/g, "-")}",
   "version": "1.0.0",
   "scripts": {
@@ -37,12 +78,13 @@ const page = async ({ params }: { params: Promise<{ projectId: string }> }) => {
   "devDependencies": {
     "serve": "^14.2.0"
   }
-}
-        `.trim(),
+}`,
       },
     },
-    ...parsedFiles, // ✅ merge original project files
+    ...parsedFiles,
   };
+
+  console.log("🎯 Final files structure:", Object.keys(files));
 
   return (
     <div className="w-full flex flex-col h-screen">
@@ -64,12 +106,9 @@ const page = async ({ params }: { params: Promise<{ projectId: string }> }) => {
         </div>
       </div>
 
-      {/* chat-code-preview-area */}
+      {/* code-preview-area */}
       <div className="w-full flex flex-1 overflow-hidden px-4 pb-4">
-        {/* chat */}
-
-        {/* code-preview */}
-        <Split files={files}></Split>
+        <Split files={files} />
       </div>
     </div>
   );

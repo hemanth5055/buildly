@@ -27,6 +27,7 @@ export async function getProjectsOfUser(userId: string) {
 }
 
 export async function addProject(
+  name: string,
   code: string,
   initialPrompt: string
 ): Promise<{ success: boolean; projectId?: string }> {
@@ -44,7 +45,7 @@ export async function addProject(
     console.log(code);
     const project = await prisma.project.create({
       data: {
-        name: "to be defined some how",
+        name,
         code,
         initialPrompt,
         userId: dbUserId,
