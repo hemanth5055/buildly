@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "react-hot-toast";
+import { WebContainerProvider } from "@/context/WebContainerContext";
 
 const mont = Montserrat({
   variable: "--font-mont",
@@ -23,9 +25,14 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en" suppressHydrationWarning>
-        <body className={`${mont.variable}  antialiased`}>{children}</body>
-      </html>
+      <WebContainerProvider>
+        <html lang="en" suppressHydrationWarning>
+          <body className={`${mont.variable}  antialiased`}>
+            <Toaster position="top-right" reverseOrder={false}></Toaster>
+            {children}
+          </body>
+        </html>
+      </WebContainerProvider>
     </ClerkProvider>
   );
 }

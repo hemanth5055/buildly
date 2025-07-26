@@ -1,8 +1,8 @@
 import { getProjectsOfUser } from "@/actions/project.action";
 import { MoveUpRight, Trash } from "lucide-react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import React from "react";
+import Delete from "./Delete";
 
 const Projects = async ({ id }: { id: string }) => {
   const projects = await getProjectsOfUser(id);
@@ -32,10 +32,7 @@ const Projects = async ({ id }: { id: string }) => {
                 <MoveUpRight />
               </div>
             </Link>
-
-            <div className="w-[40px] h-[40px] flex rounded-full items-center justify-center cursor-pointer">
-              <Trash />
-            </div>
+            <Delete id={project.id}></Delete>
           </div>
         </div>
       ))}

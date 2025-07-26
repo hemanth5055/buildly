@@ -1,31 +1,16 @@
-// Hooks/Container.ts
 import { WebContainer } from "@webcontainer/api";
 
-let webContainerInstance: any = null;
-let serverStarted = false;
-let serverUrl: string | null = null;
-
 export async function startDevServer(files: any) {
-  // Prevent restarting if already started
-  if (serverStarted && webContainerInstance && serverUrl) {
-    return { url: serverUrl, instance: webContainerInstance };
-  }
-
-  webContainerInstance = await WebContainer.boot();
+  const webContainerInstance = await WebContainer.boot();
   await webContainerInstance.mount(files);
 
   const installProcess = await webContainerInstance.spawn("npm", ["install"]);
   const installExitCode = await installProcess.exit;
-
   if (installExitCode !== 0) {
     throw new Error("npm install failed");
   }
 
-  const serverProcess = await webContainerInstance.spawn("npm", [
-    "run",
-    "start",
-  ]);
-
+  const serverProcess = await webContainerInstance.spawn("npm", ["run", "start"]);
   serverProcess.output.pipeTo(
     new WritableStream({
       write(data) {
@@ -34,12 +19,20 @@ export async function startDevServer(files: any) {
     })
   );
 
-  // Wait for WebContainer to emit server-ready
-  return new Promise((resolve, reject) => {
-    webContainerInstance.on("server-ready", (port: number, url: string) => {
-      serverStarted = true;
-      serverUrl = url;
-      resolve({ url, instance: webContainerInstance });
-    });
-  });
+  return new Promise<{ url: string; instance: typeof webContainerInstance }>(
+    (resolve, reject) => {
+      webContainerInstance.on("server-ready", (port, url) => {
+        console.log("WebContainer server started at:", url);
+        resolve({
+          url,
+          instance: webContainerInstance,
+        });
+      });
+
+      // Optional timeout to fail gracefully
+      setTimeout(() => {
+        reject(new Error("WebContainer server did not start in time"));
+      }, 10000);
+    }
+  );
 }

@@ -88,3 +88,23 @@ export async function getSpecificProject(projectId: string): Promise<{
     return { success: false };
   }
 }
+
+export async function deleteProject(projectId: string) {
+  try {
+    await prisma.project.delete({
+      where: {
+        id: projectId,
+      },
+    });
+    return {
+      success: true,
+      message: "Project deleted successfully",
+    };
+  } catch (error) {
+    console.error("Error deleting project:", error);
+    return {
+      success: false,
+      message: "Failed to delete project",
+    };
+  }
+}

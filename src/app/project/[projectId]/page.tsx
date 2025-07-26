@@ -4,6 +4,7 @@ import Preview from "@/Components/Preview";
 import Split from "@/Components/Split";
 import { auth } from "@clerk/nextjs/server";
 import { FileDown, PanelRight } from "lucide-react";
+import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import React from "react";
 
@@ -47,9 +48,12 @@ const page = async ({ params }: { params: Promise<{ projectId: string }> }) => {
     <div className="w-full flex flex-col h-screen">
       {/* navbar */}
       <div className="w-full flex justify-between items-center p-4">
-        <h1 className="font-medium text-[30px] text-black dark:text-[#F3F5F7] tracking-[-1.2px]">
-          Simple Todo App
-        </h1>
+        <Link href={"/"}>
+          <h1 className="font-medium text-[30px] text-black dark:text-[#F3F5F7] tracking-[-1.2px]">
+            Buildly
+          </h1>
+        </Link>
+
         <div className="flex gap-2 items-center">
           <div className="w-[40px] h-[40px] flex rounded-full items-center justify-center cursor-pointer">
             <PanelRight />

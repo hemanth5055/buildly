@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { addProject } from "@/actions/project.action";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const Prompt = () => {
   const [prmt, setPrmt] = useState("");
@@ -22,13 +23,19 @@ const Prompt = () => {
           prmt
         );
         if (addingFilestoDb.success) {
+          toast.success("Project created Succesfully");
           router.push(`/project/${addingFilestoDb.projectId}`);
+        } else {
+          toast.error("Unable to create website !");
         }
+      } else {
+        toast.error("Unable to create website !");
       }
 
       // optionally clear prompt or redirect
     } catch (error) {
       console.error("Error creating project:", error);
+      toast.error("Unable to create website !");
     } finally {
       setLoading(false);
     }
