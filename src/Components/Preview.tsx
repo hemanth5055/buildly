@@ -9,7 +9,6 @@ const Preview = ({ files }: { files: any }) => {
   const [delayed, setDelayed] = useState(false);
 
   useEffect(() => {
-    let isMounted = true;
     const run = async () => {
       try {
         setLoading(true);
@@ -17,11 +16,9 @@ const Preview = ({ files }: { files: any }) => {
 
         if (webContainerRef.current) {
           webContainerRef.current.on("server-ready", (port, url) => {
-            if (isMounted) {
-              setServerUrl(url);
-              setLoading(false);
-              setDelayed(false);
-            }
+            setServerUrl(url);
+            setLoading(false);
+            setDelayed(false);
           });
         }
       } catch (err) {
@@ -33,13 +30,12 @@ const Preview = ({ files }: { files: any }) => {
     run();
 
     const timeout = setTimeout(() => {
-      if (isMounted && loading) {
+      if (loading) {
         setDelayed(true);
       }
     }, 15000);
 
     return () => {
-      isMounted = false;
       clearTimeout(timeout);
     };
   }, [files]);

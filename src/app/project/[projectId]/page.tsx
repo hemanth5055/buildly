@@ -1,7 +1,7 @@
 import { getSpecificProject } from "@/actions/project.action";
-import Code from "@/Components/Code";
-import Preview from "@/Components/Preview";
+import Download from "@/Components/Download";
 import Split from "@/Components/Split";
+import { downloadCodeAsZip } from "@/download";
 import { auth } from "@clerk/nextjs/server";
 import { FileDown, PanelRight } from "lucide-react";
 import Link from "next/link";
@@ -55,8 +55,6 @@ const page = async ({ params }: { params: Promise<{ projectId: string }> }) => {
   let parsedFiles: Record<string, { file: { contents: string } }>;
   try {
     parsedFiles = parseFiles(project.code);
-
-    // Additional debugging
     if (Object.keys(parsedFiles).length === 0) {
       console.error("❌ No files were parsed!");
       console.log("Raw project.code:", JSON.stringify(project.code));
@@ -84,25 +82,26 @@ const page = async ({ params }: { params: Promise<{ projectId: string }> }) => {
     ...parsedFiles,
   };
 
-  console.log("🎯 Final files structure:", Object.keys(files));
-
   return (
     <div className="w-full flex flex-col h-screen">
       {/* navbar */}
       <div className="w-full flex justify-between items-center p-4">
-        <Link href={"/"}>
-          <h1 className="font-medium text-[30px] text-black dark:text-[#F3F5F7] tracking-[-1.2px]">
-            Buildly
-          </h1>
-        </Link>
+        <div className="flex flex-col ">
+          <Link href={"/"}>
+            <h1 className="font-medium text-[30px] text-[#F3F5F7] tracking-[-1.2px]">
+              Buildly
+            </h1>
+          </Link>
+          <h4 className="font-medium text-[15px] px-1 text-[#a7a7a7] tracking-[-0.5px]">
+            {project.name}
+          </h4>
+        </div>
 
         <div className="flex gap-2 items-center">
           <div className="w-[40px] h-[40px] flex rounded-full items-center justify-center cursor-pointer">
             <PanelRight />
           </div>
-          <div className="w-[40px] h-[40px] flex rounded-full items-center justify-center cursor-pointer">
-            <FileDown />
-          </div>
+          <Download files={files}></Download>
         </div>
       </div>
 

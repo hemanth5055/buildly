@@ -26,7 +26,7 @@ const Code = ({ files }: { files: FileStructure }) => {
   return (
     <div className="w-full h-full flex bg-black text-white overflow-hidden">
       {/* Sidebar */}
-      <div className="w-1/4 h-full bg-[#0f0f0f] p-3">
+      <div className="w-[25%] h-full bg-[#0f0f0f] p-3">
         <div className="space-y-1">
           {fileEntries.map(([fileName]) => (
             <div
@@ -46,21 +46,27 @@ const Code = ({ files }: { files: FileStructure }) => {
       </div>
 
       {/* Viewer */}
-      <div className="w-3/4 h-full overflow-auto bg-[#101010] p-4">
-        <SyntaxHighlighter
-          language="typescript"
-          style={vscDarkPlus}
-          showLineNumbers
-          wrapLines
-          customStyle={{
-            background: "transparent",
-            padding: 0,
-            fontSize: "13px",
-            lineHeight: "2",
-          }}
-        >
-          {code}
-        </SyntaxHighlighter>
+      <div className="w-[75%] h-full bg-[#101010] p-4 overflow-hidden">
+        <div className="h-full overflow-y-auto overflow-x-auto">
+          <SyntaxHighlighter
+            language={selectedFile.split(".")[1]}
+            style={vscDarkPlus}
+            showLineNumbers
+            customStyle={{
+              background: "transparent",
+              padding: 0,
+              height: "100%",
+            }}
+            codeTagProps={{
+              style: {
+                fontSize: "16px",
+                lineHeight: "2",
+              },
+            }}
+          >
+            {code}
+          </SyntaxHighlighter>
+        </div>
       </div>
     </div>
   );

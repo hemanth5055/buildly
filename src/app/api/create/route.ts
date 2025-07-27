@@ -64,7 +64,7 @@ async function generateCode(prompt: string): Promise<AIResponse> {
 You are a professional web developer specializing in vanilla HTML, CSS, and JavaScript.
 User Request: ${prompt}
 Generate a complete, lightweight web application using ONLY HTML, CSS, and vanilla JavaScript.
-Make sure you use excessive CSS to make website look better
+Make sure you use excessive CSS to make website look better.
 
 INSTRUCTIONS:
 - Respond with a raw JSON object in this exact format:
@@ -77,6 +77,7 @@ INSTRUCTIONS:
 - Do NOT include any explanation or markdown syntax.
 - Do NOT wrap the object in \`\`\`json or any code blocks.
 - The "code" value must be a single string containing all the file content blocks.
+
 `.trim();
 
   const result = await model.generateContent(enhancedPrompt);

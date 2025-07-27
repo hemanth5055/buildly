@@ -1,6 +1,12 @@
 "use client";
 import { WebContainer } from "@webcontainer/api";
-import React, { createContext, useContext, useRef, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 type WebContainerContextType = {
   webContainerRef: React.RefObject<WebContainer | null>;
@@ -17,12 +23,17 @@ export const WebContainerProvider = ({
   const webContainerRef = useRef<WebContainer | null>(null);
   const [isBooted, setIsBooted] = useState(false);
 
-  const mountFiles = async (files: any) => {
-    if (!isBooted) {
-      webContainerRef.current = await WebContainer.boot();
-      setIsBooted(true);
-    }
+  useEffect(() => {
+    const bootWebContainer = async () => {
+      if (!isBooted && !webContainerRef.current) {
+        webContainerRef.current = await WebContainer.boot();
+        setIsBooted(true);
+      }
+    };
+    bootWebContainer();
+  }, [isBooted]);
 
+  const mountFiles = async (files: any) => {
     if (!webContainerRef.current) return;
 
     await webContainerRef.current.mount(files);
@@ -30,6 +41,7 @@ export const WebContainerProvider = ({
     const installProcess = await webContainerRef.current.spawn("npm", [
       "install",
     ]);
+
     installProcess.output.pipeTo(
       new WritableStream({
         write(data) {
@@ -37,6 +49,7 @@ export const WebContainerProvider = ({
         },
       })
     );
+
     if ((await installProcess.exit) !== 0) {
       throw new Error("npm install failed");
     }
