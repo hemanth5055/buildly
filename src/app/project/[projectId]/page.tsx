@@ -3,7 +3,7 @@ import Download from "@/Components/Download";
 import Split from "@/Components/Split";
 import { downloadCodeAsZip } from "@/download";
 import { auth } from "@clerk/nextjs/server";
-import { FileDown, PanelRight } from "lucide-react";
+import { FileDown, PanelRight, Send } from "lucide-react";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import React from "react";
@@ -106,7 +106,35 @@ const page = async ({ params }: { params: Promise<{ projectId: string }> }) => {
       </div>
 
       {/* code-preview-area */}
-      <div className="w-full flex flex-1 overflow-hidden px-4 pb-4">
+      <div className="w-full flex flex-1 overflow-hidden px-4">
+        <div className="w-[25%] h-full bg-[#121212] rounded-md flex flex-col pb-2 max-sm:hidden">
+          <div className="w-full h-full overflow-y-scroll flex flex-col gap-3 p-4">
+            {/* User Message (initialPrompt) */}
+            <div className="w-full flex justify-end">
+              <div className="max-w-[80%]  bg-blue-500 text-white text-sm px-4 py-2 rounded-2xl rounded-br-none">
+                <h2>{project.initialPrompt}</h2>
+              </div>
+            </div>
+
+            {/* AI Response (aiReply) */}
+            <div className="w-full flex justify-start">
+              <div className="max-w-[80%] bg-indigo-400 text-white text-sm px-4 py-2 rounded-2xl rounded-bl-none">
+                <h2>{project.aiReply}</h2>
+              </div>
+            </div>
+          </div>
+          {/* Input box */}
+          <div className="w-full h-[60px] flex items-center gap-2 px-2 py-1">
+            <input
+              type="text"
+              placeholder="Type a message..."
+              className="flex-1 h-full px-3 py-2 rounded-md bg-zinc-800 text-white text-sm outline-none"
+            />
+            <div className="w-[40px] h-[40px] rounded-full flex justify-center items-center cursor-pointer">
+              <Send className="text-sm"></Send>
+            </div>
+          </div>
+        </div>
         <Split files={files} />
       </div>
     </div>

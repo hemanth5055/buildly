@@ -28,6 +28,7 @@ export async function getProjectsOfUser(userId: string) {
 
 export async function addProject(
   name: string,
+  aiReply: string,
   code: string,
   initialPrompt: string
 ): Promise<{ success: boolean; projectId?: string }> {
@@ -47,6 +48,7 @@ export async function addProject(
       data: {
         name,
         code,
+        aiReply,
         initialPrompt,
         userId: dbUserId,
       },
@@ -64,6 +66,7 @@ export async function getSpecificProject(projectId: string): Promise<{
     id: string;
     name: string;
     code: string;
+    aiReply: string;
     initialPrompt: string;
     createdAt: Date;
     userId: string;

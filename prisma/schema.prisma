@@ -26,6 +26,7 @@ model Project {
   userId        String
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   code          String
+  aiReply       String   @default("")
   initialPrompt String
   createdAt     DateTime @default(now())
 

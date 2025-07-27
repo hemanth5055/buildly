@@ -20,6 +20,7 @@ const Prompt = ({ credits }: { credits: Number }) => {
         //add this data to database and redirect to /projectId
         const addingFilestoDb = await addProject(
           data.data.name,
+          data.data.reply,
           JSON.stringify(data.data.code),
           prmt
         );

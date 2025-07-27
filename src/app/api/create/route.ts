@@ -70,6 +70,7 @@ INSTRUCTIONS:
 - Respond with a raw JSON object in this exact format:
 {
   "name": "project name according to given prompt",
+  "reply": "breif 2 lines about project you have made starting with keyword Here is the",
   "code": "<File name=\\"index.html\\">\\n<!DOCTYPE html>\\n<html>...\\n</File>\\n<File name=\\"style.css\\">\\nbody { background-color: white; }\\n</File>\\n<File name=\\"script.js\\">\\n Any needed JS code goes here like :console.log('Hello, world!');\\n</File>"
 }
 
