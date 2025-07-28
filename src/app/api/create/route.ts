@@ -70,14 +70,17 @@ INSTRUCTIONS:
 - Respond with a raw JSON object in this exact format:
 {
   "name": "project name according to given prompt",
-  "reply": "breif 2 lines about project you have made starting with keyword Here is the",
-  "code": "<File name=\\"index.html\\">\\n<!DOCTYPE html>\\n<html>...\\n</File>\\n<File name=\\"style.css\\">\\nbody { background-color: white; }\\n</File>\\n<File name=\\"script.js\\">\\n Any needed JS code goes here like :console.log('Hello, world!');\\n</File>"
+  "reply": "Here is the brief 2-line description of the project you have made.",
+  "code:"{
+  "index.html": "<!DOCTYPE html>\n<html>\n  <head>\n    <title>Sample Project</title>\n    <link rel=\"stylesheet\" href=\"style.css\">\n  </head>\n  <body>\n    <h1>Hello World</h1>\n    <script src=\"index.js\"></script>\n  </body>\n</html>",
+  "style.css": "body {\n  background-color: white;\n  font-family: Arial, sans-serif;\n  text-align: center;\n  margin-top: 50px;\n}",
+  "index.js": "console.log('Hello, world!');"
+  }
 }
 
 - Escape all double quotes inside the string values properly.
 - Do NOT include any explanation or markdown syntax.
 - Do NOT wrap the object in \`\`\`json or any code blocks.
-- The "code" value must be a single string containing all the file content blocks.
 
 `.trim();
 

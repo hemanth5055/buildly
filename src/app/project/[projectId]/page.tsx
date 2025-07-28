@@ -1,45 +1,18 @@
 import { getSpecificProject } from "@/actions/project.action";
 import Download from "@/Components/Download";
 import Split from "@/Components/Split";
-import { downloadCodeAsZip } from "@/download";
 import { auth } from "@clerk/nextjs/server";
-import { FileDown, PanelRight, Send } from "lucide-react";
+import { PanelRight, Send } from "lucide-react";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import React from "react";
 
-// Parses the <File name="...">...</File> blocks into an object keyed by filename -> Took Help of AI
-function parseFiles(input: string) {
-  // Handle escaped characters properly
-  let processedInput = input.replace(/\\n/g, "\n");
-  processedInput = processedInput.replace(/\\"/g, '"'); // Handle escaped quotes
-
-  // Try different regex patterns to see which one works
-  const patterns = [
-    /<File name="([^"]+)">\n([\s\S]*?)<\/File>/g,
-    /<File name="([^"]+)">([\s\S]*?)<\/File>/g, // Without requiring \n after opening tag
-    /<File\s+name="([^"]+)"\s*>([\s\S]*?)<\/File>/g, // More flexible whitespace
-  ];
-
+function structureCode(code: any) {
   const files: Record<string, { file: { contents: string } }> = {};
-  let matchCount = 0;
-
-  for (let i = 0; i < patterns.length; i++) {
-    const pattern = patterns[i];
-    // Reset the regex
-    pattern.lastIndex = 0;
-    const matches = Array.from(processedInput.matchAll(pattern));
-    if (matches.length > 0) {
-      for (const [fullMatch, name, content] of matches) {
-        matchCount++;
-        files[name] = {
-          file: { contents: content.trim() },
-        };
-      }
-      break; // Stop trying other patterns if this one worked
-    }
-  }
-
+  Object.entries(code).forEach(([fileName, contents]) => {
+    files[fileName] = { file: { contents } };
+  });
+  console.log(files);
   return files;
 }
 
@@ -54,10 +27,9 @@ const page = async ({ params }: { params: Promise<{ projectId: string }> }) => {
 
   let parsedFiles: Record<string, { file: { contents: string } }>;
   try {
-    parsedFiles = parseFiles(project.code);
+    parsedFiles = structureCode(JSON.parse(project.code));
     if (Object.keys(parsedFiles).length === 0) {
       console.error("❌ No files were parsed!");
-      console.log("Raw project.code:", JSON.stringify(project.code));
     }
   } catch (err) {
     console.error("Failed to parse project code:", err);
@@ -84,9 +56,11 @@ const page = async ({ params }: { params: Promise<{ projectId: string }> }) => {
 
   return (
     <div className="w-full flex flex-col h-screen">
-      {/* navbar */}
-      <div className="w-full flex justify-between items-center p-4">
-        <div className="flex flex-col ">
+      <div className="hidden max-sm:flex p-4">
+        <h1 className="text-white">* Not designed for mobile</h1>
+      </div>
+      <div className="w-full flex justify-between items-center p-4 max-sm:hidden">
+        <div className="flex flex-col">
           <Link href={"/"}>
             <h1 className="font-medium text-[30px] text-[#F3F5F7] tracking-[-1.2px]">
               Buildly
@@ -96,34 +70,27 @@ const page = async ({ params }: { params: Promise<{ projectId: string }> }) => {
             {project.name}
           </h4>
         </div>
-
         <div className="flex gap-2 items-center">
           <div className="w-[40px] h-[40px] flex rounded-full items-center justify-center cursor-pointer">
             <PanelRight />
           </div>
-          <Download files={files}></Download>
+          <Download files={files} />
         </div>
       </div>
-
-      {/* code-preview-area */}
-      <div className="w-full flex flex-1 overflow-hidden px-4">
-        <div className="w-[25%] h-full bg-[#121212] rounded-md flex flex-col pb-2 max-sm:hidden">
+      <div className="w-full flex flex-1 overflow-hidden px-4 h-full  max-sm:hidden">
+        <div className="w-[25%] h-[675px] bg-[#121212] rounded-md flex flex-col pb-2 max-sm:hidden">
           <div className="w-full h-full overflow-y-scroll flex flex-col gap-3 p-4">
-            {/* User Message (initialPrompt) */}
             <div className="w-full flex justify-end">
-              <div className="max-w-[80%]  bg-blue-500 text-white text-sm px-4 py-2 rounded-2xl rounded-br-none">
+              <div className="max-w-[80%] bg-blue-500 text-white text-sm px-4 py-2 rounded-2xl rounded-br-none">
                 <h2>{project.initialPrompt}</h2>
               </div>
             </div>
-
-            {/* AI Response (aiReply) */}
             <div className="w-full flex justify-start">
               <div className="max-w-[80%] bg-indigo-400 text-white text-sm px-4 py-2 rounded-2xl rounded-bl-none">
                 <h2>{project.aiReply}</h2>
               </div>
             </div>
           </div>
-          {/* Input box */}
           <div className="w-full h-[60px] flex items-center gap-2 px-2 py-1">
             <input
               type="text"
@@ -131,11 +98,13 @@ const page = async ({ params }: { params: Promise<{ projectId: string }> }) => {
               className="flex-1 h-full px-3 py-2 rounded-md bg-zinc-800 text-white text-sm outline-none"
             />
             <div className="w-[40px] h-[40px] rounded-full flex justify-center items-center cursor-pointer">
-              <Send className="text-sm"></Send>
+              <Send className="text-sm" />
             </div>
           </div>
         </div>
-        <Split files={files} />
+        <div className="w-[75%] h-full">
+          <Split files={files} />
+        </div>
       </div>
     </div>
   );

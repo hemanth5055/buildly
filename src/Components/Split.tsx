@@ -8,7 +8,6 @@ const Split = ({ files }: { files: any }) => {
 
   return (
     <div className="flex-1 ml-4 bg-[#121212] rounded-[10px] p-4 flex flex-col gap-2 max-sm:ml-0">
-      {/* Toggle Button */}
       <button
         className="self-start bg-[#212121] py-1 px-4 rounded-md text-[#F3F5F7] text-[16px] font-medium tracking-[-0.5px] hover:bg-[#2c2c2c] transition-colors"
         onClick={() => setShowCode((prev) => !prev)}
@@ -16,14 +15,16 @@ const Split = ({ files }: { files: any }) => {
         {showCode ? "Preview" : "Code"}
       </button>
 
-      {/* Content Area */}
-      <div className="w-full h-full overflow-auto ">
-        <div className={`w-full h-full ${!showCode ? "hidden" : ""}`}>
-          <Code files={files} />
-        </div>
-        <div className={`w-full h-full ${showCode ? "hidden" : ""}`}>
-          <Preview files={files} />
-        </div>
+      <div className="w-full flex-1 overflow-hidden rounded-md">
+        {showCode ? (
+          <div className="w-full h-full">
+            <Code files={files} />
+          </div>
+        ) : (
+          <div className="w-full h-full">
+            <Preview files={files} />
+          </div>
+        )}
       </div>
     </div>
   );
