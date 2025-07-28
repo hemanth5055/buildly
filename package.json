@@ -4,10 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npx prisma generate && next build",
+    "build": "npx prisma migrate deploy && npx prisma generate && next build",
     "start": "next start",
-    "lint": "next lint",
-    "deploy": "npx prisma migrate deploy && npm run build"
+    "lint": "next lint"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.27.1",
