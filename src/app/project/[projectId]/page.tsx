@@ -84,7 +84,7 @@ const page = async ({ params }: { params: Promise<{ projectId: string }> }) => {
         </div>
       </div>
       <div className="w-full flex flex-1 overflow-hidden px-4 h-full  max-sm:hidden">
-        <div className="w-[25%] h-[675px] bg-[#121212] rounded-md flex flex-col pb-2 max-sm:hidden">
+        <div className="w-[25%] h-[675px] bg-[#121212] rounded-md flex flex-col pb-2 max-sm:hidden scrollbar-hide">
           <div className="w-full h-full overflow-y-scroll flex flex-col gap-3 p-4">
             <div className="w-full flex justify-end">
               <div className="max-w-[80%] bg-blue-500 text-white text-sm px-4 py-2 rounded-2xl rounded-br-none">

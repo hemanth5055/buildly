@@ -45,7 +45,7 @@ const Code = ({ files }: { files: FileStructure }) => {
       </div>
 
       <div className="w-[75%] h-full bg-[#101010] p-4 max-sm:w-full max-sm:h-[60%]">
-        <div className="w-full h-full overflow-auto rounded-md">
+        <div className="w-full h-full overflow-auto rounded-md scrollbar-hide">
           <SyntaxHighlighter
             language={selectedFile.split(".")[1]}
             style={vscDarkPlus}
