@@ -33,7 +33,7 @@ const Preview = ({ files }: { files: any }) => {
       if (loading) {
         setDelayed(true);
       }
-    }, 20000); //wait for atleast 20sec to mount the files and run npm install
+    }, 20000); //wait for atleast 20sec to mount the files 
 
     return () => {
       clearTimeout(timeout);

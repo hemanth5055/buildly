@@ -49,7 +49,6 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true, data: files });
   } catch (error) {
-    console.error("Error:", error);
     return NextResponse.json(
       { success: false, message: "Something went wrong" },
       { status: 500 }
@@ -70,7 +69,7 @@ INSTRUCTIONS:
 - Respond with a raw JSON object in this exact format:
 {
   "name": "project name according to given prompt",
-  "reply": "Here is the brief 2-line description of the project you have made.",
+  "reply": "A brief 2-line description of the project you have made. (make sure you start with "Here is" keyword ",
   "code:"{
   "index.html": "<!DOCTYPE html>\n<html>\n  <head>\n    <title>Sample Project</title>\n    <link rel=\"stylesheet\" href=\"style.css\">\n  </head>\n  <body>\n    <h1>Hello World</h1>\n    <script src=\"index.js\"></script>\n  </body>\n</html>",
   "style.css": "body {\n  background-color: white;\n  font-family: Arial, sans-serif;\n  text-align: center;\n  margin-top: 50px;\n}",

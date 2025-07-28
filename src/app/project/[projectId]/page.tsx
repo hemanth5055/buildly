@@ -7,12 +7,18 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import React from "react";
 
-function structureCode(code: any) {
-  const files: Record<string, { file: { contents: string } }> = {};
+type File = {
+  file: {
+    contents: string;
+  };
+};
+
+function structureCode(code: Record<string, string>): Record<string, File> {
+  const files: Record<string, File> = {};
   Object.entries(code).forEach(([fileName, contents]) => {
     files[fileName] = { file: { contents } };
   });
-  console.log(files);
+
   return files;
 }
 
@@ -71,9 +77,9 @@ const page = async ({ params }: { params: Promise<{ projectId: string }> }) => {
           </h4>
         </div>
         <div className="flex gap-2 items-center">
-          <div className="w-[40px] h-[40px] flex rounded-full items-center justify-center cursor-pointer">
+          {/* <div className="w-[40px] h-[40px] flex rounded-full items-center justify-center cursor-pointer">
             <PanelRight />
-          </div>
+          </div> */}
           <Download files={files} />
         </div>
       </div>
@@ -86,7 +92,7 @@ const page = async ({ params }: { params: Promise<{ projectId: string }> }) => {
               </div>
             </div>
             <div className="w-full flex justify-start">
-              <div className="max-w-[80%] bg-indigo-400 text-white text-sm px-4 py-2 rounded-2xl rounded-bl-none">
+              <div className="max-w-[80%] bg-[#323232] text-white text-sm px-4 py-2 rounded-2xl rounded-bl-none">
                 <h2>{project.aiReply}</h2>
               </div>
             </div>
@@ -94,10 +100,11 @@ const page = async ({ params }: { params: Promise<{ projectId: string }> }) => {
           <div className="w-full h-[60px] flex items-center gap-2 px-2 py-1">
             <input
               type="text"
-              placeholder="Type a message..."
-              className="flex-1 h-full px-3 py-2 rounded-md bg-zinc-800 text-white text-sm outline-none"
+              placeholder="Feature Unimplemented yet ..!!"
+              className="flex-1 h-full px-3 py-2 rounded-md bg-zinc-800 text-white text-sm outline-none cursor-not-allowed"
+              disabled
             />
-            <div className="w-[40px] h-[40px] rounded-full flex justify-center items-center cursor-pointer">
+            <div className="w-[40px] h-[40px] rounded-full flex justify-center items-center cursor-not-allowed">
               <Send className="text-sm" />
             </div>
           </div>

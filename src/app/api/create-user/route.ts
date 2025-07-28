@@ -1,4 +1,4 @@
-//should be force-dynamic
+// should be force-dynamic
 export const dynamic = "force-dynamic";
 import { Webhook } from "svix";
 import { WebhookEvent } from "@clerk/nextjs/server";
@@ -6,25 +6,23 @@ import { WebhookEvent } from "@clerk/nextjs/server";
 import { NextRequest } from "next/server";
 import { prisma } from "@/prisma";
 
-//handle webhooks here
+// handle webhooks here
 export async function POST(req: NextRequest) {
-  //verify webhook
+  // verify webhook
   const webhook_secret = process.env.CLERK_WEBHOOK_SECRET;
   if (!webhook_secret) {
-    console.error("❌ Missing WEBHOOK_SECRET environment variable");
+    console.error("Missing WEBHOOK_SECRET environment variable");
     return new Response("Server configuration error", { status: 500 });
   }
+
   const svix_id = req.headers.get("svix-id");
   const svix_timestamp = req.headers.get("svix-timestamp");
   const svix_signature = req.headers.get("svix-signature");
-  console.log(svix_id);
-  console.log(svix_timestamp);
-  console.log(svix_signature);
+
   if (!svix_id || !svix_timestamp || !svix_signature) {
-    return new Response("Error occurred -- no svix headers", {
-      status: 400,
-    });
+    return new Response("Missing Svix headers", { status: 400 });
   }
+
   const body = await req.text();
 
   const svix = new Webhook(webhook_secret);
@@ -38,14 +36,26 @@ export async function POST(req: NextRequest) {
     }) as WebhookEvent;
   } catch (err) {
     console.error("Error verifying webhook:", err);
-    return new Response("Error occurred", {
-      status: 400,
-    });
+    return new Response("Invalid webhook signature", { status: 400 });
   }
+
   const eventType = event.type;
+
   if (eventType === "user.created") {
     const user = event.data;
+
     try {
+      const existingUser = await prisma.user.findUnique({
+        where: {
+          clerkId: user.id,
+        },
+      });
+
+      if (existingUser) {
+        console.log(`ℹUser already exists: ${user.id}`);
+        return new Response("User already exists", { status: 200 });
+      }
+
       await prisma.user.create({
         data: {
           clerkId: user.id,
@@ -54,11 +64,13 @@ export async function POST(req: NextRequest) {
           image: user.image_url,
         },
       });
-      console.log("👤 New user created:", user.id);
+
+      console.log("New user created:", user.id);
     } catch (err) {
-      console.error("Database error:", err);
+      console.error(" Database error:", err);
       return new Response("Database error", { status: 500 });
     }
   }
+
   return new Response("Webhook processed successfully", { status: 200 });
 }

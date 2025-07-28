@@ -33,7 +33,6 @@ const Prompt = ({ credits }: { credits: Number }) => {
       } else {
         toast.error("Unable to create website !");
       }
-
       // optionally clear prompt or redirect
     } catch (error) {
       console.error("Error creating project:", error);
