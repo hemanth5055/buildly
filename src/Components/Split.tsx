@@ -11,7 +11,7 @@ const Split = ({ files }: { files: any }) => {
     <div className="flex-1 ml-4 bg-[#121212] rounded-[10px]  flex flex-col gap-2 max-sm:ml-0 relative overflow-hidden h-[700px]">
       {/* Preview/Code Toggle Button */}
       <button
-        className="absolute bottom-4 right-4  bg-[#212121] h-[40px] w-[40px] flex justify-center items-center rounded-md text-[#F3F5F7] text-[16px] font-medium tracking-[-0.5px] hover:bg-[#2c2c2c] transition-colors z-10"
+        className="absolute top-2 right-4  bg-[#212121] h-[40px] w-[40px] flex justify-center items-center rounded-md text-[#F3F5F7] text-[16px] font-medium tracking-[-0.5px] hover:bg-[#2c2c2c] transition-colors z-10"
         onClick={() => setShowCode((prev) => !prev)}
       >
         {showCode ? <Eye size={18} /> : <CodeIcon size={18} />}
