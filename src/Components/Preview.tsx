@@ -42,7 +42,7 @@ const Preview = ({ files }: { files: any }) => {
 
   if (loading || !serverUrl) {
     return (
-      <div className="w-full h-[600px] flex items-center justify-center">
+      <div className="w-full h-full flex items-center justify-center">
         <div className="text-gray-300 animate-pulse text-lg text-center px-4">
           {delayed ? "It's taking longer than expected." : "Starting server..."}
         </div>
@@ -53,7 +53,7 @@ const Preview = ({ files }: { files: any }) => {
   return (
     <iframe
       src={serverUrl}
-      className="w-full rounded-[10px] h-[600px]"
+      className="w-full rounded-[10px] h-full"
       sandbox="allow-scripts allow-same-origin allow-forms"
       title="Preview"
     />

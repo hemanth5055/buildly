@@ -4,20 +4,24 @@ import axios from "axios";
 import { addProject } from "@/actions/project.action";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import LoadingOverlay from "./LoadingOverlay";
+import { Sparkles, Rocket } from "lucide-react"; // optional icons
 
 const Prompt = ({ credits }: { credits: Number }) => {
   const [prmt, setPrmt] = useState("");
   const [loading, setLoading] = useState(false);
+  const [enhanceLoading, setEnhanceloading] = useState(false);
   const router = useRouter();
 
   const handleCreate = async () => {
-    if (prmt.trim().length === 0) return;
+    if (prmt.trim().length === 0) {
+      toast("Please enter a prompt.");
+      return;
+    }
     setLoading(true);
     try {
       const { data } = await axios.post("/api/create", { prompt: prmt });
-      console.log("API Response:", data);
       if (data.success) {
-        //add this data to database and redirect to /projectId
         const addingFilestoDb = await addProject(
           data.data.name,
           data.data.reply,
@@ -25,29 +29,81 @@ const Prompt = ({ credits }: { credits: Number }) => {
           prmt
         );
         if (addingFilestoDb.success) {
-          toast.success("Project created Succesfully");
+          toast.success("Project created successfully");
           router.push(`/project/${addingFilestoDb.projectId}`);
         } else {
-          toast.error("Unable to create website !");
+          toast.error("Failed to save project to database.");
         }
       } else {
-        toast.error("Unable to create website !");
+        toast.error("Website generation failed.");
       }
-      // optionally clear prompt or redirect
     } catch (error) {
-      console.error("Error creating project:", error);
-      toast.error("Unable to create website !");
+      console.error("Error:", error);
+      toast.error("An error occurred while creating the project.");
     } finally {
       setLoading(false);
     }
   };
 
+  const handleEnhance = async () => {
+    if (!prmt.trim()) {
+      toast("Please enter a prompt before enhancing.");
+      return;
+    }
+    setEnhanceloading(true);
+    try {
+      const { data } = await axios.post("/api/enhance", { prompt: prmt });
+      if (data && data.success) {
+        toast.success("Prompt enhanced successfully");
+        setPrmt(data.enhancedPrompt);
+      } else {
+        toast.error("Enhancement failed");
+      }
+    } catch (error) {
+      toast.error("Something went wrong while enhancing the prompt.");
+    } finally {
+      setEnhanceloading(false);
+    }
+  };
+
   return (
-    <div className="relative w-full flex flex-col gap-4 items-center mt-[100px] mb-[30px]">
-      {/* Loading overlay */}
-      {loading && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="flex items-center gap-2 text-white text-lg">
+    <div className="relative w-full  flex flex-col items-center gap-6 mt-24 mb-12 px-4">
+      {loading && <LoadingOverlay />}
+      <textarea
+        name="prompt"
+        id="prompt"
+        value={prmt}
+        onChange={(e) => setPrmt(e.target.value)}
+        placeholder="What are you planning to create? (The more detailed you are, the better the result!)"
+        className="w-[70%] max-sm:w-[100%] h-[200px] bg-[#121212] rounded-lg p-4 text-white text-base outline-none resize-none border border-[#2A2A2A]  transition"
+      />
+
+      <div className="flex gap-4">
+        <button
+          onClick={handleCreate}
+          disabled={credits === 0 || loading}
+          className={`flex items-center gap-2 px-5 py-2.5 rounded-md text-white text-base font-medium transition
+            ${
+              credits === 0 || loading
+                ? "bg-gray-600 cursor-not-allowed"
+                : "bg-[#121212] hover:bg-[#1e1e1e] cursor-pointer"
+            }`}
+        >
+          <Rocket size={18} />
+          Create
+        </button>
+
+        <button
+          onClick={handleEnhance}
+          disabled={credits === 0 || enhanceLoading}
+          className={`flex items-center gap-2 px-5 py-2.5 rounded-md text-white text-base font-medium transition
+            ${
+              credits === 0 || enhanceLoading
+                ? "bg-gray-600 cursor-not-allowed"
+                : "bg-[#121212] hover:bg-[#1e1e1e] cursor-pointer"
+            }`}
+        >
+          {enhanceLoading ? (
             <svg
               className="animate-spin h-5 w-5 text-white"
               xmlns="http://www.w3.org/2000/svg"
@@ -61,39 +117,21 @@ const Prompt = ({ credits }: { credits: Number }) => {
                 r="10"
                 stroke="currentColor"
                 strokeWidth="4"
-              ></circle>
+              />
               <path
                 className="opacity-75"
                 fill="currentColor"
                 d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-              ></path>
+              />
             </svg>
-            Generating...
-          </div>
-        </div>
-      )}
-
-      <textarea
-        name="prompt"
-        id="prompt"
-        value={prmt}
-        onChange={(e) => setPrmt(e.target.value)}
-        className="w-[60%] h-[200px] max-sm:w-[85%] rounded-[10px] bg-[#121212] outline-none p-4 text-[18px] resize-none text-white"
-        placeholder="What are you planning to create? (The more detailed you are, the smarter the output !)"
-      ></textarea>
-
-      <button
-        className={`px-4 py-2 rounded-[5px] text-white transition 
-    ${
-      credits === 0 || loading
-        ? "bg-gray-500 cursor-not-allowed"
-        : "bg-[#121212] cursor-pointer"
-    }`}
-        onClick={handleCreate}
-        disabled={loading || credits === 0}
-      >
-        Generate 🚀
-      </button>
+          ) : (
+            <>
+              <Sparkles size={18} />
+              Enhance
+            </>
+          )}
+        </button>
+      </div>
     </div>
   );
 };

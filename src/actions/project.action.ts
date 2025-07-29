@@ -41,9 +41,7 @@ export async function addProject(
     if (!userRecord.success || !userRecord.user) {
       return { success: false };
     }
-
     const dbUserId = userRecord.user.id;
-    console.log(code);
     const project = await prisma.project.create({
       data: {
         name,

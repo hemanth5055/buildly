@@ -24,13 +24,14 @@ const Code = ({ files }: { files: FileStructure }) => {
   }, [selectedFile, files]);
 
   return (
-    <div className="w-full h-[600px] flex bg-black text-white overflow-hidden max-sm:flex-col">
-      <div className="w-[25%] h-full bg-[#0f0f0f] p-3 overflow-y-auto max-sm:w-full max-sm:h-[40%]">
-        <div className="space-y-1">
+    <div className="w-full h-full flex flex-col bg-black text-white overflow-hidden rounded-md">
+      {/* File list at the top */}
+      <div className="w-full bg-[#0f0f0f] p-2 overflow-x-auto scrollbar-hide border-b border-neutral-800">
+        <div className="flex gap-2">
           {fileEntries.map(([fileName]) => (
             <div
               key={fileName}
-              className={`text-sm cursor-pointer px-3 py-2 rounded-md flex items-center gap-2 transition-all ${
+              className={`text-sm whitespace-nowrap cursor-pointer px-3 py-2 rounded-md flex items-center gap-2 transition-all ${
                 selectedFile === fileName
                   ? "bg-[#1c1c1c] text-white"
                   : "text-gray-400 hover:bg-[#1a1a1a]"
@@ -44,27 +45,27 @@ const Code = ({ files }: { files: FileStructure }) => {
         </div>
       </div>
 
-      <div className="w-[75%] h-full bg-[#101010] p-4 max-sm:w-full max-sm:h-[60%]">
-        <div className="w-full h-full overflow-auto rounded-md scrollbar-hide">
-          <SyntaxHighlighter
-            language={selectedFile.split(".")[1]}
-            style={vscDarkPlus}
-            showLineNumbers
-            customStyle={{
-              background: "transparent",
-              padding: 0,
-              height: "100%",
-            }}
-            codeTagProps={{
-              style: {
-                fontSize: "16px",
-                lineHeight: "2",
-              },
-            }}
-          >
-            {code}
-          </SyntaxHighlighter>
-        </div>
+      {/* Code Viewer */}
+      <div className="flex-1 w-full h-full bg-[#101010] p-4 overflow-auto rounded-b-md scrollbar-hide">
+        <SyntaxHighlighter
+          language={selectedFile.split(".").pop()}
+          style={vscDarkPlus}
+          showLineNumbers
+          customStyle={{
+            background: "transparent",
+            padding: 0,
+            height: "100%",
+            scrollbarWidth: "none",
+          }}
+          codeTagProps={{
+            style: {
+              fontSize: "16px",
+              lineHeight: "2",
+            },
+          }}
+        >
+          {code}
+        </SyntaxHighlighter>
       </div>
     </div>
   );

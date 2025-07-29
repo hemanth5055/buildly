@@ -8,31 +8,42 @@ const Projects = async ({ id }: { id: string }) => {
   const projects = await getProjectsOfUser(id);
 
   if (!projects.success || !projects.projects?.length) {
-    return <h1 className="text-red-400">No projects yet</h1>;
+    return (
+      <div className="text-center text-red-400 text-lg mt-10">
+        No projects yet
+      </div>
+    );
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="grid gap-6">
       {projects.projects.map((project) => (
         <div
           key={project.id}
-          className="w-full flex bg-[#121212] p-4 py-6 rounded-[10px]"
+          className="bg-[#121212]  rounded-2xl p-6 shadow-md transition-all"
         >
-          <div className="flex-1 flex flex-col gap-1">
-            <h1 className="font-medium text-[30px] tracking-[-1px]">
-              {project.name}
-            </h1>
-            <p className="text-gray-400">
-              {project.initialPrompt || "No description available."}
-            </p>
-          </div>
-          <div className="flex gap-2 items-start">
-            <Link href={`/project/${project.id}`}>
-              <div className="w-[40px] h-[40px] flex rounded-full items-center justify-center cursor-pointer">
-                <MoveUpRight />
-              </div>
-            </Link>
-            <Delete id={project.id}></Delete>
+          <div className="flex justify-between items-start">
+            <div className="flex-1">
+              <h1 className="text-2xl font-semibold text-white mb-2">
+                {project.name}
+              </h1>
+              <p className="text-sm text-gray-400 leading-relaxed">
+                {(project.initialPrompt?.split(" ").length || 0) > 50
+                  ? project.initialPrompt
+                      .split(" ")
+                      .slice(0, 50)
+                      .join(" ") + "..."
+                  : project.initialPrompt || "No description available."}
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <Link href={`/project/${project.id}`}>
+                <div className="w-9 h-9 rounded-full bg-[#2e2e2e] hover:bg-[#3a3a3a] flex items-center justify-center transition-colors cursor-pointer">
+                  <MoveUpRight className="text-white w-4 h-4" />
+                </div>
+              </Link>
+              <Delete id={project.id} />
+            </div>
           </div>
         </div>
       ))}
