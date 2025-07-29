@@ -33,7 +33,7 @@ const Preview = ({ files }: { files: any }) => {
       if (loading) {
         setDelayed(true);
       }
-    }, 20000); //wait for atleast 20sec to mount the files 
+    }, 30000); //wait for atleast 20sec to mount the files
 
     return () => {
       clearTimeout(timeout);
@@ -44,9 +44,7 @@ const Preview = ({ files }: { files: any }) => {
     return (
       <div className="w-full h-[600px] flex items-center justify-center">
         <div className="text-gray-300 animate-pulse text-lg text-center px-4">
-          {delayed
-            ? "It's taking longer than expected. Please refresh."
-            : "Starting server..."}
+          {delayed ? "It's taking longer than expected." : "Starting server..."}
         </div>
       </div>
     );

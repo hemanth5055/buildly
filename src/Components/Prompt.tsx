@@ -78,8 +78,8 @@ const Prompt = ({ credits }: { credits: Number }) => {
         id="prompt"
         value={prmt}
         onChange={(e) => setPrmt(e.target.value)}
-        className="w-[60%] h-[200px] rounded-[10px] bg-[#121212] outline-none p-4 text-[20px] resize-none text-white"
-        placeholder="What are you planning to create?"
+        className="w-[60%] h-[200px] max-sm:w-[85%] rounded-[10px] bg-[#121212] outline-none p-4 text-[18px] resize-none text-white"
+        placeholder="What are you planning to create? (The more detailed you are, the smarter the output !)"
       ></textarea>
 
       <button
