@@ -61,14 +61,16 @@ const page = async ({ params }: { params: Promise<{ projectId: string }> }) => {
   };
 
   return (
-    <div className="w-full flex flex-col h-screen">
+    <div className="w-full flex flex-col h-screen bg-white dark:bg-black">
       <div className="hidden max-sm:flex p-4">
-        <h1 className="text-white">* Not designed for mobile</h1>
+        <h1 className="text-black dark:text-white">
+          * Not designed for mobile
+        </h1>
       </div>
       <div className="w-full flex justify-between items-center p-4 max-sm:hidden">
         <div className="flex flex-col">
           <Link href={"/"}>
-            <h1 className="font-medium text-[30px] text-[#F3F5F7] tracking-[-1.2px]">
+            <h1 className="font-medium text-[30px] text-black dark:text-white tracking-[-1.2px]">
               Buildly
             </h1>
           </Link>

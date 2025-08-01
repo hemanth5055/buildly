@@ -67,7 +67,7 @@ const Prompt = ({ credits }: { credits: Number }) => {
   };
 
   return (
-    <div className="relative w-full  flex flex-col items-center gap-6 mt-24 mb-12 px-4">
+    <div className="relative w-full flex flex-col items-center gap-6 mt-24 mb-12 px-4 py-10 max-sm:py-5 ">
       {loading && <LoadingOverlay />}
       <textarea
         name="prompt"
@@ -75,32 +75,32 @@ const Prompt = ({ credits }: { credits: Number }) => {
         value={prmt}
         onChange={(e) => setPrmt(e.target.value)}
         placeholder="What are you planning to create? (The more detailed you are, the better the result!)"
-        className="w-[70%] max-sm:w-[100%] h-[200px] bg-[#121212] rounded-lg p-4 text-white text-base outline-none resize-none border border-[#2A2A2A]  transition"
+        className="w-[70%] max-sm:w-[100%] h-[200px] dark:bg-[#121212] rounded-[25px] bg-[#f0f0f0] p-4 text-black dark:text-white text-base outline-none resize-none transition placeholder:text-gray-500"
       />
 
       <div className="flex gap-4">
         <button
           onClick={handleCreate}
           disabled={credits === 0 || loading}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-md text-white text-base font-medium transition
+          className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-black bg-[#f0f0f0] dark:text-white dark:bg-[#121212] text-base font-medium transition
             ${
               credits === 0 || loading
-                ? "bg-gray-600 cursor-not-allowed"
-                : "bg-[#121212] hover:bg-[#1e1e1e] cursor-pointer"
+                ? "bg-gray-600  cursor-not-allowed"
+                : " dark:hover:bg-[#1e1e1e] hover:bg-[#d3d3d3] cursor-pointer"
             }`}
         >
-          <Rocket size={18} />
+          <Rocket size={18} className="text-orange-300" />
           Create
         </button>
 
         <button
           onClick={handleEnhance}
           disabled={credits === 0 || enhanceLoading}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-md text-white text-base font-medium transition
+          className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-black bg-[#f0f0f0] dark:text-white dark:bg-[#121212] text-base font-medium transition
             ${
               credits === 0 || enhanceLoading
                 ? "bg-gray-600 cursor-not-allowed"
-                : "bg-[#121212] hover:bg-[#1e1e1e] cursor-pointer"
+                : "dark:hover:bg-[#1e1e1e] hover:bg-[#d3d3d3] cursor-pointer"
             }`}
         >
           {enhanceLoading ? (
@@ -126,7 +126,7 @@ const Prompt = ({ credits }: { credits: Number }) => {
             </svg>
           ) : (
             <>
-              <Sparkles size={18} />
+              <Sparkles size={18} className="text-blue-300" />
               Enhance
             </>
           )}

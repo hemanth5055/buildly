@@ -42,9 +42,9 @@ const Preview = ({ files }: { files: any }) => {
 
   if (loading || !serverUrl) {
     return (
-      <div className="w-full h-full flex items-center justify-center">
-        <div className="text-gray-300 animate-pulse text-lg text-center px-4">
-          {delayed ? "It's taking longer than expected." : "Starting server..."}
+      <div className="w-full h-full flex items-center justify-center ">
+        <div className="text-gray-500  animate-pulse text-lg text-center px-4">
+          {delayed ? "Don't worry first boot takes little longer." : "Starting server..."}
         </div>
       </div>
     );

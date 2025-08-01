@@ -9,7 +9,7 @@ const Download = ({ files }: { files: any }) => {
       className="w-[40px] h-[40px] flex rounded-full items-center justify-center cursor-pointer"
       onClick={() => downloadCodeAsZip(files)}
     >
-      <FileDown />
+      <FileDown className="text-black dark:text-white" />
     </div>
   );
 };

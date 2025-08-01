@@ -15,14 +15,14 @@ const Page = async () => {
   const { success, user } = await getUserByClerkId(userId);
   if (!success || !user) redirect("/signin");
   return (
-    <div className="w-full flex flex-col gap-4 p-3">
+    <div className="w-full flex flex-col gap-4 p-3 bg-white dark:bg-black">
       {/* navbar */}
-      <div className="w-full flex justify-between items-center ">
-        <h1 className="font-medium text-[40px] text-[#ffffff] tracking-[-1.2px]">
+      <div className="w-full flex justify-between items-center px-2">
+        <h1 className="font-medium text-[40px] text-black dark:text-[#ffffff] tracking-[-1.2px]">
           Buildly
         </h1>
         <div className="flex gap-4 items-center">
-          <div className=" h-[40px] flex gap-1 rounded-full items-center justify-center cursor-pointer">
+          <div className=" h-[40px] flex gap-1 rounded-full items-center justify-center cursor-pointer text-black dark:text-white">
             {" "}
             Credits :{" "}
             <h2
@@ -34,8 +34,8 @@ const Page = async () => {
             </h2>
           </div>
           <SignOutButton redirectUrl="/signin">
-            <div className="w-[40px] h-[40px] flex rounded-full items-center justify-center cursor-pointer">
-              <LogOut />
+            <div className="w-[40px] h-[40px] flex rounded-full items-center justify-center cursor-pointer ">
+              <LogOut className="text-black dark:text-white" />
             </div>
           </SignOutButton>
         </div>
@@ -45,8 +45,8 @@ const Page = async () => {
       <Prompt credits={user.credits}></Prompt>
 
       <div className="w-full flex flex-col gap-4 p-4">
-        <h1 className="font-medium text-[20px] tracking-[-1px]">
-          Your Project's
+        <h1 className="font-medium text-[20px] tracking-[-1px] text-black dark:text-white">
+          {user.name}'s Workspace
         </h1>
         {/* user-previous-prompted-projects */}
         <React.Suspense fallback={<Loading></Loading>}>

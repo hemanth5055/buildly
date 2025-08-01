@@ -32,7 +32,7 @@ const Delete = ({ id }: { id: string }) => {
       onClick={handleDelete}
       title="Delete Project"
     >
-      <Trash />
+      <Trash className="text-black dark:text-white hover:text-white" />
     </div>
   );
 };

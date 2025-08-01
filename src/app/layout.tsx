@@ -27,7 +27,7 @@ export default function RootLayout({
     <ClerkProvider>
       <WebContainerProvider>
         <html lang="en" suppressHydrationWarning>
-          <body className={`${mont.variable}  antialiased`}>
+          <body className={`${mont.variable}  antialiased `}>
             <Toaster position="top-right" reverseOrder={false}></Toaster>
             {children}
           </body>

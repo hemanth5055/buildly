@@ -16,29 +16,27 @@ const Projects = async ({ id }: { id: string }) => {
   }
 
   return (
-    <div className="grid gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
       {projects.projects.map((project) => (
         <div
           key={project.id}
-          className="bg-[#121212]  rounded-2xl p-6 shadow-md transition-all"
+          className="bg-[#f0f0f0] hover:bg-[#d3d3d3] dark:bg-[#121212] dark:hover:bg-[#1e1e1e] hover:shadow-lg rounded-2xl p-6 transition-all duration-300"
         >
           <div className="flex justify-between items-start">
             <div className="flex-1">
-              <h1 className="text-2xl font-semibold text-white mb-2">
+              <h2 className="text-xl font-semibold text-black dark:text-white mb-2">
                 {project.name}
-              </h1>
-              <p className="text-sm text-gray-400 leading-relaxed">
+              </h2>
+              <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed line-clamp-4">
                 {(project.initialPrompt?.split(" ").length || 0) > 50
-                  ? project.initialPrompt
-                      .split(" ")
-                      .slice(0, 50)
-                      .join(" ") + "..."
+                  ? project.initialPrompt.split(" ").slice(0, 50).join(" ") +
+                    "..."
                   : project.initialPrompt || "No description available."}
               </p>
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-col items-end gap-2 ml-4">
               <Link href={`/project/${project.id}`}>
-                <div className="w-9 h-9 rounded-full bg-[#2e2e2e] hover:bg-[#3a3a3a] flex items-center justify-center transition-colors cursor-pointer">
+                <div className="w-9 h-9 rounded-full bg-[#2e2e2e] hover:bg-[#3a3a3a] flex items-center justify-center cursor-pointer transition-colors">
                   <MoveUpRight className="text-white w-4 h-4" />
                 </div>
               </Link>
