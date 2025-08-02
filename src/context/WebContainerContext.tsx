@@ -7,6 +7,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import toast from "react-hot-toast";
 
 type WebContainerContextType = {
   webContainerRef: React.RefObject<WebContainer | null>;
@@ -51,6 +52,7 @@ export const WebContainerProvider = ({
     );
 
     if ((await installProcess.exit) !== 0) {
+      toast.error("Failed to load preview !");
       throw new Error("npm install failed");
     }
 

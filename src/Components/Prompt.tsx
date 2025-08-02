@@ -29,18 +29,22 @@ const Prompt = ({ credits }: { credits: Number }) => {
           prmt
         );
         if (addingFilestoDb.success) {
-          toast.success("Project created successfully");
           router.push(`/project/${addingFilestoDb.projectId}`);
+          setTimeout(() => {
+            setLoading(false);
+            toast.success("Project created successfully");
+          }, 1500);
         } else {
+          setLoading(false);
           toast.error("Failed to save project to database.");
         }
       } else {
+        setLoading(false);
         toast.error("Website generation failed.");
       }
     } catch (error) {
       console.error("Error:", error);
       toast.error("An error occurred while creating the project.");
-    } finally {
       setLoading(false);
     }
   };

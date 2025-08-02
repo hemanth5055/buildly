@@ -61,13 +61,8 @@ const page = async ({ params }: { params: Promise<{ projectId: string }> }) => {
   };
 
   return (
-    <div className="w-full flex flex-col h-screen bg-white dark:bg-black">
-      <div className="hidden max-sm:flex p-4">
-        <h1 className="text-black dark:text-white">
-          * Not designed for mobile
-        </h1>
-      </div>
-      <div className="w-full flex justify-between items-center p-4 max-sm:hidden">
+    <div className="w-full flex flex-col min-h-screen bg-white dark:bg-black">
+      <div className="w-full flex justify-between items-center p-4 ">
         <div className="flex flex-col">
           <Link href={"/"}>
             <h1 className="font-medium text-[30px] text-black dark:text-white tracking-[-1.2px]">
@@ -85,35 +80,23 @@ const page = async ({ params }: { params: Promise<{ projectId: string }> }) => {
           <Download files={files} />
         </div>
       </div>
-      <div className="w-full flex flex-1 overflow-hidden scrollbar-hide  px-4 h-full  max-sm:hidden">
-        {/* <div className="w-[25%] h-[675px] bg-[#121212] rounded-md flex flex-col pb-2 max-sm:hidden scrollbar-hide">
-          <div className="w-full h-full overflow-y-scroll flex flex-col gap-3 p-4">
-            <div className="w-full flex justify-end">
-              <div className="max-w-[80%] bg-blue-500 text-white text-sm px-4 py-2 rounded-2xl rounded-br-none">
-                <h2>{project.initialPrompt}</h2>
-              </div>
-            </div>
-            <div className="w-full flex justify-start">
-              <div className="max-w-[80%] bg-[#323232] text-white text-sm px-4 py-2 rounded-2xl rounded-bl-none">
-                <h2>{project.aiReply}</h2>
-              </div>
-            </div>
-          </div>
-          <div className="w-full h-[60px] flex items-center gap-2 px-2 py-1">
-            <input
-              type="text"
-              placeholder="Feature Unimplemented yet ..!!"
-              className="flex-1 h-full px-3 py-2 rounded-md bg-zinc-800 text-white text-sm outline-none cursor-not-allowed"
-              disabled
-            />
-            <div className="w-[40px] h-[40px] rounded-full flex justify-center items-center cursor-not-allowed">
-              <Send className="text-sm" />
-            </div>
-          </div>
-        </div> */}
+      <div className="w-full flex flex-1 overflow-hidden scrollbar-hide  px-4 h-[600px] ">
         <div className="w-full h-full">
           <Split files={files} />
         </div>
+      </div>
+      <div className="w-full h-[100px] flex justify-center items-center">
+        <h1 className="font-cursive dark:text-white text-black italic">
+          Crafted by{" "}
+          <a
+            href="https://github.com/hemanth5055"
+            target="_blank"
+            className="text-blue-500 dark:text-blue-400"
+          >
+            Hemanth
+          </a>{" "}
+          😎
+        </h1>
       </div>
     </div>
   );
